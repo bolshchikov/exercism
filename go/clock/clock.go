@@ -2,6 +2,9 @@ package clock
 
 import "fmt"
 
+const minsInHour = 60
+const hoursInDay = 24
+
 // Clock represents time
 type Clock struct {
 	hh int
@@ -14,34 +17,32 @@ func (c Clock) String() string {
 
 // Add should add time to the given clock
 func (c Clock) Add(mins int) Clock {
-	c.hh += mins / 60
-	c.mm += mins % 60
+	c.hh += mins / minsInHour
+	c.mm += mins % minsInHour
 	return c.normalize()
 }
 
 // Subtract should subtract time to the given clock
 func (c Clock) Subtract(mins int) Clock {
-	c.hh -= mins / 60
-	c.mm -= mins % 60
+	c.hh -= mins / minsInHour
+	c.mm -= mins % minsInHour
 	return c.normalize()
 }
 
 func (c Clock) normalize() Clock {
 	hoursToSubtract := 0
 	for c.mm < 0 {
-		c.mm = 60 + c.mm
+		c.mm = minsInHour + c.mm
 		hoursToSubtract++
 	}
-	remainingM := c.mm % 60
-	c.hh += c.mm / 60
-	c.hh -= hoursToSubtract
+	c.hh = c.hh + c.mm/minsInHour - hoursToSubtract
 	for c.hh < 0 {
-		c.hh = 24 + c.hh
+		c.hh = hoursInDay + c.hh
 	}
-	if c.hh >= 24 {
-		c.hh = c.hh % 24
+	if c.hh >= hoursInDay {
+		c.hh = c.hh % hoursInDay
 	}
-	c.mm = remainingM
+	c.mm = c.mm % minsInHour
 	return c
 }
 
