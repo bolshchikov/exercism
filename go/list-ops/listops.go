@@ -29,13 +29,28 @@ func (list IntList) Filter(fn predFunc) (res IntList) {
 }
 
 // Foldl is folding array left
-func (list IntList) Foldl(fn binFunc, arg int) int {
-	return 0
+func (list IntList) Foldl(fn binFunc, init int) int {
+	if list.Length() == 0 {
+		return init
+	}
+	res := init
+	for _, v := range list {
+		res = fn(res, v)
+	}
+	return res
 }
 
 // Foldr is folding array right
-func (list IntList) Foldr(fn binFunc, arg int) int {
-	return 0
+func (list IntList) Foldr(fn binFunc, init int) int {
+	if list.Length() == 0 {
+		return init
+	}
+	res := init
+	reversed := list.Reverse()
+	for _, v := range reversed {
+		res = fn(v, res)
+	}
+	return res
 }
 
 // Map applies the given function to each arr member and returns updated array
@@ -52,7 +67,13 @@ func (list IntList) Map(fn unaryFunc) IntList {
 
 // Reverse changes the order of arr members
 func (list IntList) Reverse() (res IntList) {
-	return list
+	if list.Length() == 0 {
+		return list
+	}
+	for _, v := range list {
+		res = IntList{v}.Append(res)
+	}
+	return
 }
 
 // Append adds items to list
