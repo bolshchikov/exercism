@@ -1,6 +1,6 @@
 package listops
 
-// IntList is a list of intergers
+// IntList is a list of integers
 type IntList []int
 
 type binFunc func(x, y int) int
@@ -36,7 +36,7 @@ func (list IntList) Map(fn unaryFunc) IntList {
 }
 
 // Reverse changes the order of arr members
-func (list IntList) Reverse() IntList {
+func (list IntList) Reverse() (res IntList) {
 	return list
 }
 
@@ -57,5 +57,14 @@ func (list IntList) Append(appendee IntList) IntList {
 
 //Concat joins two or more arrays
 func (list IntList) Concat(parts []IntList) IntList {
-	return list
+	concatLength := 0
+	for _, arr := range parts {
+		concatLength += arr.Length()
+	}
+	var res IntList
+	res = res.Append(list)
+	for _, part := range parts {
+		res = res.Append(part)
+	}
+	return res
 }
