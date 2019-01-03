@@ -8,17 +8,10 @@ func IsIsogram(str string) bool {
 	for _, r := range str {
 		r := unicode.ToLower(r)
 		_, ok := occurrences[r]
-		if ok {
-			occurrences[r]++
-		} else {
-			occurrences[r] = 1
-		}
-	}
-
-	for key, val := range occurrences {
-		if key != ' ' && key != '-' && val > 1 {
+		if ok && r != ' ' && r != '-' {
 			return false
 		}
+		occurrences[r] = 1
 	}
 	return true
 }
