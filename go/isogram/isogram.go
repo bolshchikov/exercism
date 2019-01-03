@@ -4,14 +4,16 @@ import "unicode"
 
 // IsIsogram identifies whether the word does not contain any repetetions
 func IsIsogram(str string) bool {
-	occurrences := make(map[rune]int)
+	occurrences := make(map[rune]bool)
 	for _, r := range str {
+		if !unicode.IsLetter(r) {
+			continue
+		}
 		r := unicode.ToLower(r)
-		_, ok := occurrences[r]
-		if ok && r != ' ' && r != '-' {
+		if occurrences[r] {
 			return false
 		}
-		occurrences[r] = 1
+		occurrences[r] = true
 	}
 	return true
 }
