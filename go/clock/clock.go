@@ -30,13 +30,9 @@ func (c Clock) Subtract(mins int) Clock {
 
 func (c Clock) normalize() Clock {
 	for c.mins < 0 || c.mins >= minutesInDay {
-		switch {
-		case c.mins < -minutesInDay || c.mins > minutesInDay:
-			c.mins = c.mins % minutesInDay
-		case -minutesInDay < c.mins && c.mins < 0:
-			c.mins = minutesInDay + c.mins
-		case c.mins == minutesInDay:
-			c.mins = 0
+		c.mins = c.mins % minutesInDay
+		if c.mins < 0 {
+			c.mins += minutesInDay
 		}
 	}
 	return c
