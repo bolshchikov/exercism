@@ -7,7 +7,7 @@ type Triplet struct {
 	c int
 }
 
-func sortTriplet(t *Triplet) *Triplet {
+func sortTriplet(t Triplet) Triplet {
 	if t.a > t.b {
 		t.a, t.b = t.b, t.a
 	}
@@ -31,11 +31,11 @@ func Range(min, max int) (res []Triplet) {
 				2 * m * n,
 				m*m + n*n,
 			}
-			sortTriplet(&t)
-			if t.c > max || t.a < min {
+			st := sortTriplet(t)
+			if st.c > max || st.a < min {
 				continue
 			}
-			res = append(res, t)
+			res = append(res, st)
 		}
 		m++
 	}
@@ -43,8 +43,12 @@ func Range(min, max int) (res []Triplet) {
 }
 
 // Sum returns list of triplets that satisfy given sum
-func Sum(sum int) []Triplet {
-	return []Triplet{
-		{3, 4, 5},
+func Sum(sum int) (res []Triplet) {
+	possibilities := Range(1, sum/2)
+	for _, t := range possibilities {
+		if t.a+t.b+t.c == sum {
+			res = append(res, t)
+		}
 	}
+	return
 }
