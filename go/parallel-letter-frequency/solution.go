@@ -12,19 +12,19 @@ func mergeMaps(mapA, mapB FreqMap) FreqMap {
 	return mapA
 }
 
-func calcFrequency(input string) <-chan FreqMap {
-	c := make(chan FreqMap)
-	go func() {
-		c <- Frequency(input)
-	}()
-	return c
-}
-
 // ConcurrentFrequency calculates letter frequency concurrently
 func ConcurrentFrequency(input []string) FreqMap {
 	res := FreqMap{}
-	for _, passage := range input {
-		mergeMaps(res, <-calcFrequency(passage))
+	c := make(chan FreqMap)
+	for _, text := range input {
+		go func(t string) {
+			c <- Frequency(t)
+		}(text)
+	}
+	received := 0
+	for received != 3 {
+		mergeMaps(res, <-c)
+		received++
 	}
 	return res
 }
